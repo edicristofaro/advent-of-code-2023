@@ -30,22 +30,20 @@ dests = [n for n in nodes.keys() if n[-1] == "A"]
 a_dests = [n for n in nodes.keys() if n[-1] == "A"]
 z_dests = [n for n in nodes.keys() if n[-1] == "Z"]
 print(f"{dests=}\n{z_dests=}")
-steps = 0 
-dests = ['AAA', 'MTA', 'QNA']
-z_dests = ['ZZZ', 'BLZ', 'NPZ']
+paths = []
 
-while set(dests) != set(z_dests):
-    for d in directions:
-        temp_dests = []
-        # print(f"Start Dests: {dests}\n{d=}")
-        for dest in dests:
-            temp_dests.append(nodes.get(dest)[d])
-        steps += 1
-        dests = temp_dests[:]
-        # print(f"End Dests: {dests}\n{steps=}")
-        if len(set([i[2] for i in dests])) == 1 and dests[0][2] == "Z":
-            print(dests)
-            print(f"Out! Part 2: {steps=}")
-            sys.exit()
+for i, dest in enumerate(dests):
+    start_dest = dest
+    steps = 0
+    while dest[-1] != 'Z':
+        for d in directions:
+            dest = nodes.get(dest)[d]
+            steps += 1
+            if dest[-1] == 'Z':
+                print(f"Part 2: {start_dest=} {dest=} {steps=}")
+                paths.append(steps)
+                break
 
-print(f"Part 2: {steps=}")
+# I'm not entirely sure why this works - probably only does if each starting point has only one path to a destination, or its luck
+from math import lcm
+print(lcm(*paths))
